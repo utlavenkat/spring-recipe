@@ -22,7 +22,7 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        unitOfMeasureMap = unitOfMeasureService.getUnitOfServiceMap();
+        unitOfMeasureMap = unitOfMeasureService.getUnitOfMeasureMap();
         prepareGuacamoleRecipe();
         prepareGrillChickenRecipe();
     }
