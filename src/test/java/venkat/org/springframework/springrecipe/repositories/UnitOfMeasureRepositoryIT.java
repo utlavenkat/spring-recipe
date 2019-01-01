@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @Slf4j
-public class UnitOfMeasureRepositoryTest {
+public class UnitOfMeasureRepositoryIT {
     @Autowired
     private UnitOfMeasureRepository unitOfMeasureRepository;
 
