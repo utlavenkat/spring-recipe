@@ -2,9 +2,7 @@ package venkat.org.springframework.springrecipe.domain;
 
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnJava;
 
 import javax.persistence.*;
@@ -14,6 +12,8 @@ import java.util.Set;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Setter
 @Getter
 public class Recipe implements Serializable {

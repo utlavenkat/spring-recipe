@@ -27,7 +27,7 @@ public class UnitOfMeasureService {
      * This method returns all Unit Of Measure objects map. The key is uom string.
      * @return
      */
-    public Map<String,UnitOfMeasure> getUnitOfServiceMap() {
+    public Map<String,UnitOfMeasure> getUnitOfMeasureMap() {
         Map<String,UnitOfMeasure> unitOfMeasureMap = new HashMap<>();
 
         unitOfMeasureRepository.findAll().forEach(unitOfMeasure -> {
