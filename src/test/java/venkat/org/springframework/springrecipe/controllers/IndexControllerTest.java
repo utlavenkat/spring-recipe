@@ -45,9 +45,18 @@ public class IndexControllerTest {
 
     @Test
     public void testMockMVC() throws Exception {
+        val recipe1 = Recipe.builder().id(1L).build();
+        val recipe2 = Recipe.builder().id(2L).build();
+        val mockedRecipeSet = new HashSet<Recipe>();
+        mockedRecipeSet.add(recipe1);
+        mockedRecipeSet.add(recipe2);
+
+        when(recipeService.getAllRecipes()).thenReturn(mockedRecipeSet);
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
         mockMvc.perform(get("/")).andExpect(status().isOk())
-                .andExpect(view().name("index"));
+                .andExpect(view().name("index"))
+                .andExpect(model().size(1))
+                .andExpect(model().attribute("recipes", Matchers.hasSize(2)));
     }
 
     @Test
