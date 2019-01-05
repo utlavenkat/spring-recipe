@@ -79,6 +79,7 @@
                         <include>**/*IT.java</include>
                     </includes>
                     <additionalClasspathElements>
+                        <useSystemClassLoader>false</useSystemClassLoader>
                         <additionalClasspathElement>${basedir}/target/classes</additionalClasspathElement>
                     </additionalClasspathElements>
                     <parallel>none</parallel>
