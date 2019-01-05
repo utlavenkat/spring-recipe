@@ -1,6 +1,6 @@
 package venkat.org.springframework.springrecipe.services;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import venkat.org.springframework.springrecipe.domain.Recipe;
 import venkat.org.springframework.springrecipe.repositories.RecipeRepository;
@@ -9,9 +9,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RecipeService {
-    private RecipeRepository recipeRepository;
+    private final RecipeRepository recipeRepository;
 
     public Recipe saveRecipe(Recipe recipe) {
         return recipeRepository.save(recipe);
@@ -19,9 +19,11 @@ public class RecipeService {
 
     public Set<Recipe> getAllRecipes() {
         Set<Recipe> recipes = new HashSet<>();
-        recipeRepository.findAll().forEach(recipe -> {
-            recipes.add(recipe);
-        });
+        recipeRepository.findAll().forEach(recipes::add);
         return recipes;
+    }
+
+    public Recipe findRecipeById(final Long id) {
+        return recipeRepository.findById(id).orElse(null);
     }
 }

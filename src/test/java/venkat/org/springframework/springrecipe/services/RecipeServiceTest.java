@@ -12,6 +12,7 @@ import venkat.org.springframework.springrecipe.repositories.RecipeRepository;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -65,21 +66,20 @@ public class RecipeServiceTest {
         categorySet.add(category);
 
         recipe.setCategories(categorySet);
-        val mockedRecipe = recipe;
-        mockedRecipe.setId(1234L);
-        mockedRecipe.getNotes().setId(1234L);
-        mockedRecipe.getIngredients().iterator().next().setId(1234L);
-        when(recipeRepository.save(recipe)).thenReturn(mockedRecipe);
+        recipe.setId(1234L);
+        recipe.getNotes().setId(1234L);
+        recipe.getIngredients().iterator().next().setId(1234L);
+        when(recipeRepository.save(recipe)).thenReturn(recipe);
 
 
         Recipe savedRecipe = recipeService.saveRecipe(recipe);
 
         Assert.assertNotNull(savedRecipe);
         Assert.assertNotNull(savedRecipe.getId());
-        assertEquals(mockedRecipe.getId(),savedRecipe.getId());
+        assertEquals(recipe.getId(), savedRecipe.getId());
         Assert.assertNotNull(savedRecipe.getNotes());
         Assert.assertNotNull(savedRecipe.getNotes().getId());
-        assertEquals(mockedRecipe.getNotes().getId(),savedRecipe.getNotes().getId());
+        assertEquals(recipe.getNotes().getId(), savedRecipe.getNotes().getId());
         Assert.assertNotNull(savedRecipe.getCategories());
         Assert.assertEquals(categorySet.size(), savedRecipe.getCategories().size());
         Assert.assertEquals(recipe.getCookTime(), savedRecipe.getCookTime());
@@ -91,7 +91,7 @@ public class RecipeServiceTest {
         Assert.assertEquals(recipe.getSource(),savedRecipe.getSource());
         Assert.assertEquals(recipe.getUrl(),savedRecipe.getUrl());
         Assert.assertNotNull(savedRecipe.getIngredients());
-        Assert.assertTrue(savedRecipe.getIngredients().size() ==1);
+        assertEquals(1, savedRecipe.getIngredients().size());
         Ingredient savedIngredient = savedRecipe.getIngredients().iterator().next();
         Assert.assertNotNull(savedIngredient.getId());
         verify(recipeRepository,times(1)).save(recipe);
@@ -111,6 +111,26 @@ public class RecipeServiceTest {
 
         Set<Recipe> recipeSet = recipeService.getAllRecipes();
         Assert.assertNotNull(recipeSet);
-        Assert.assertTrue(recipeSet.size() == 2);
+        assertEquals(2, recipeSet.size());
+    }
+
+    @Test
+    public void findRecipeById_valid() {
+        Long id = anyLong();
+        when(recipeRepository.findById(id)).thenReturn(Optional.of(Recipe.builder().id(id).build()));
+        val recipe = recipeService.findRecipeById(1L);
+        assertNotNull("Recipe should not be null", recipe);
+        assertNotNull("Recipe ID should not be null", recipe.getId());
+        assertEquals("Id value is not matching", id, recipe.getId());
+        verify(recipeRepository, times(1)).findById(anyLong());
+    }
+
+    @Test
+    public void findRecipeById_Invalid() {
+        Long id = anyLong();
+        when(recipeRepository.findById(id)).thenReturn(Optional.empty());
+        Recipe recipe = recipeService.findRecipeById(id);
+        assertNull("Recipe should be null", recipe);
+        verify(recipeRepository, times(1)).findById(id);
     }
 }

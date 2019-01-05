@@ -12,3 +12,5 @@ INSERT into UNIT_OF_MEASURE(uom) values ('Ripe');
 INSERT into UNIT_OF_MEASURE(uom) values ('Quantity');
 INSERT into UNIT_OF_MEASURE(uom) values ('Dash');
 INSERT into UNIT_OF_MEASURE(uom) values ('Pint');
+
+INSERT  into RECIPE(id,description) values (10000,'Test Recipe');
