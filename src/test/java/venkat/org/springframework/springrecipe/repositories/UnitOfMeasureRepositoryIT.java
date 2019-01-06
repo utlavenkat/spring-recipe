@@ -2,12 +2,12 @@ package venkat.org.springframework.springrecipe.repositories;
 
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import lombok.*;
 import venkat.org.springframework.springrecipe.domain.UnitOfMeasure;
 
 import java.util.HashSet;
@@ -32,7 +32,7 @@ public class UnitOfMeasureRepositoryIT {
 
     @Test
     public void testSave() {
-        val unitOfMeasure = new UnitOfMeasure("TestUOM");
+        val unitOfMeasure = UnitOfMeasure.builder().uom("TestUOM").build();
         val savedUnitOfMeasure = unitOfMeasureRepository.save(unitOfMeasure);
         assertNotNull(savedUnitOfMeasure);
         assertNotNull(savedUnitOfMeasure.getId());
@@ -42,8 +42,8 @@ public class UnitOfMeasureRepositoryIT {
 
     @Test
     public void testSaveAll() {
-        val uom1 = new UnitOfMeasure("TestUOM1");
-        val uom2 = new UnitOfMeasure("TestUOM2");
+        val uom1 = UnitOfMeasure.builder().uom("TestUOM1").build();
+        val uom2 = UnitOfMeasure.builder().uom("TestUOM2").build();
         Set<UnitOfMeasure> unitOfMeasures = new HashSet<>(2);
         unitOfMeasures.add(uom1);
         unitOfMeasures.add(uom2);
@@ -88,7 +88,7 @@ public class UnitOfMeasureRepositoryIT {
        assertNotNull(unitOfMeasures);
        Set<UnitOfMeasure> unitOfMeasureSet = new HashSet<>();
        unitOfMeasures.forEach(unitOfMeasureSet::add);
-       assertTrue(unitOfMeasureSet.size() == 9);
+        assertEquals(9, unitOfMeasureSet.size());
     }
 
     @Test
@@ -100,10 +100,8 @@ public class UnitOfMeasureRepositoryIT {
         Set<UnitOfMeasure> unitOfMeasures = new HashSet<>(2);
         unitOfMeasureRepository.findAllById(idSet).forEach(unitOfMeasures::add);
         assertFalse(unitOfMeasures.isEmpty());
-        assertTrue(unitOfMeasures.size() == idSet.size());
-        unitOfMeasures.forEach(unitOfMeasure -> {
-            assertTrue(idSet.contains(unitOfMeasure.getId()));
-        });
+        assertEquals(unitOfMeasures.size(), idSet.size());
+        unitOfMeasures.forEach(unitOfMeasure -> assertTrue(idSet.contains(unitOfMeasure.getId())));
     }
 
     @Test

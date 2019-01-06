@@ -6,9 +6,9 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Setter
 @Getter
-@RequiredArgsConstructor
 public class Notes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
