@@ -5,19 +5,19 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import venkat.org.springframework.springrecipe.command.CategoryCommand;
 import venkat.org.springframework.springrecipe.domain.Category;
 import venkat.org.springframework.springrecipe.repositories.CategoryRepository;
 
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 
-public class CategoryServiceTest {
+public class CategoryServiceImplTest {
 
     private CategoryService categoryService;
 
@@ -27,7 +27,7 @@ public class CategoryServiceTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        categoryService = new CategoryService(categoryRepository);
+        categoryService = new CategoryServiceImpl(categoryRepository);
     }
 
     @After
@@ -45,7 +45,7 @@ public class CategoryServiceTest {
 
         Assert.assertNotNull(categoryService);
         when(categoryRepository.findByCategoryName(categoryName)).thenReturn(Optional.of(mockedCategory));
-        Category category = categoryService.getByCategoryName(categoryName);
+        CategoryCommand category = categoryService.getByCategoryName(categoryName);
         Assert.assertNotNull(category);
         Assert.assertNotNull(category.getId());
         assertEquals(mockedCategory.getId(),category.getId());
@@ -56,7 +56,7 @@ public class CategoryServiceTest {
     @Test
     public void testGetByCategoryName_Invalid() {
         val categoryName = "doesnotexists";
-        when(categoryRepository.findByCategoryName(categoryName)).thenReturn(Optional.ofNullable(null));
+        when(categoryRepository.findByCategoryName(categoryName)).thenReturn(Optional.empty());
         Assert.assertNull(categoryService.getByCategoryName(categoryName));
     }
 }

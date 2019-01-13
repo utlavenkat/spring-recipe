@@ -1,27 +1,31 @@
 package venkat.org.springframework.springrecipe.mappers;
 
-import lombok.val;
-import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 import venkat.org.springframework.springrecipe.command.CategoryCommand;
 import venkat.org.springframework.springrecipe.domain.Category;
 
-@Component
+@Slf4j
 public class CategoryMapper {
-    private final MapperFacade mapperFacade;
-
-    public CategoryMapper() {
-        val mapperFactory = new DefaultMapperFactory.Builder().build();
-        mapperFactory.classMap(CategoryCommand.class, Category.class).byDefault().register();
-        mapperFacade = mapperFactory.getMapperFacade();
-    }
 
     public Category convertCommandToDomain(CategoryCommand categoryCommand) {
-        return mapperFacade.map(categoryCommand, Category.class);
+        log.info("Converting Category Command to Domain");
+        Category category = null;
+        if (categoryCommand != null) {
+            category = new Category();
+            category.setCategoryName(categoryCommand.getCategoryName());
+            category.setId(categoryCommand.getId());
+        }
+        log.info("Category Domain ::" + category);
+        return category;
     }
 
     public CategoryCommand convertDomainToCommand(Category category) {
-        return mapperFacade.map(category, CategoryCommand.class);
+        log.info("Converting Category Domain to Command");
+        CategoryCommand categoryCommand = null;
+        if (category != null) {
+            categoryCommand = CategoryCommand.builder().id(category.getId()).categoryName(category.getCategoryName()).build();
+        }
+        log.info("Category Command ::" + categoryCommand);
+        return categoryCommand;
     }
 }

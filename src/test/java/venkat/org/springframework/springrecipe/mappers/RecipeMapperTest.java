@@ -11,8 +11,7 @@ import venkat.org.springframework.springrecipe.domain.Recipe;
 import java.math.BigDecimal;
 import java.util.HashSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class RecipeMapperTest {
     private RecipeMapper recipeMapper;
@@ -75,7 +74,7 @@ public class RecipeMapperTest {
         assertEquals(recipeCommand.getDifficulty().name(), recipe.getDifficulty().name());
         assertEquals(recipeCommand.getDescription(), recipe.getDescription());
         assertEquals(recipeCommand.getCookTime(), recipe.getCookTime());
-        assertEquals(recipeCommand.getIngredients().size(), recipe.getIngredients().size());
-        assertEquals(recipeCommand.getCategories().size(), recipe.getCategories().size());
+        assertNull(recipeCommand.getIngredients());
+        assertNull(recipeCommand.getCategories());
     }
 }

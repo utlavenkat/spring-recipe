@@ -1,28 +1,82 @@
 package venkat.org.springframework.springrecipe.mappers;
 
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
-import org.springframework.stereotype.Component;
+import org.apache.commons.collections4.CollectionUtils;
+import venkat.org.springframework.springrecipe.command.CategoryCommand;
+import venkat.org.springframework.springrecipe.command.DifficultyCommand;
+import venkat.org.springframework.springrecipe.command.IngredientCommand;
 import venkat.org.springframework.springrecipe.command.RecipeCommand;
+import venkat.org.springframework.springrecipe.domain.Category;
+import venkat.org.springframework.springrecipe.domain.Difficulty;
+import venkat.org.springframework.springrecipe.domain.Ingredient;
 import venkat.org.springframework.springrecipe.domain.Recipe;
 
-@Component
-public class RecipeMapper {
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-    private final MapperFacade mapperFacade;
+@Slf4j
+public class RecipeMapper {
+    private IngredientMapper ingredientMapper;
+    private NotesMapper notesMapper;
+    private CategoryMapper categoryMapper;
 
     public RecipeMapper() {
-        val mapperFactory = new DefaultMapperFactory.Builder().build();
-        mapperFactory.classMap(RecipeCommand.class, Recipe.class).byDefault().register();
-        mapperFacade = mapperFactory.getMapperFacade();
+        ingredientMapper = new IngredientMapper();
+        notesMapper = new NotesMapper();
+        categoryMapper = new CategoryMapper();
     }
 
     public Recipe convertCommandToDomain(final RecipeCommand recipeCommand) {
-        return mapperFacade.map(recipeCommand, Recipe.class);
+        log.info("Converting Recipe Command to Domain");
+        Recipe recipe = Recipe.builder().id(recipeCommand.getId()).description(recipeCommand.getDescription())
+                .cookTime(recipeCommand.getCookTime()).servings(recipeCommand.getServings())
+                .directions(recipeCommand.getDirections()).source(recipeCommand.getSource()).url(recipeCommand.getUrl())
+                .prepTime(recipeCommand.getPrepTime()).build();
+        recipe.setNotes(notesMapper.convertCommandToDomain(recipeCommand.getNotes()));
+        if (recipeCommand.getDifficulty() != null) {
+            recipe.setDifficulty(Difficulty.valueOf(recipeCommand.getDifficulty().name()));
+        }
+
+        val categories = recipeCommand.getCategories();
+        if (CollectionUtils.isNotEmpty(categories)) {
+            Set<Category> categorySet = categories.stream().map(categoryCommand -> categoryMapper.convertCommandToDomain(categoryCommand)).collect(Collectors.toCollection(() -> new HashSet<>(categories.size())));
+            recipe.setCategories(categorySet);
+        }
+
+        val recipeCommandIngredients = recipeCommand.getIngredients();
+        if (CollectionUtils.isNotEmpty(recipeCommandIngredients)) {
+            Set<Ingredient> ingredients = recipeCommandIngredients.stream().map(ingredientCommand -> ingredientMapper.convertCommandToDomain(ingredientCommand)).collect(Collectors.toCollection(() -> new HashSet<>(recipeCommandIngredients.size())));
+            recipe.addIngredients(ingredients);
+        }
+        log.info("Recipe Domain ::" + recipe.toString());
+        return recipe;
     }
 
     public RecipeCommand convertDomainToCommand(final Recipe recipe) {
-        return mapperFacade.map(recipe, RecipeCommand.class);
+
+        log.info("Converting recipe domain to command");
+        val recipeCommand = RecipeCommand.builder().id(recipe.getId()).directions(recipe.getDirections())
+                .cookTime(recipe.getCookTime()).description(recipe.getDescription()).prepTime(recipe.getPrepTime())
+                .servings(recipe.getServings()).source(recipe.getSource()).url(recipe.getUrl()).build();
+
+        recipeCommand.setNotes(notesMapper.convertDomainToCommand(recipe.getNotes()));
+
+        if (recipe.getDifficulty() != null) {
+            recipeCommand.setDifficulty(DifficultyCommand.valueOf(recipe.getDifficulty().name()));
+        }
+
+        if (CollectionUtils.isNotEmpty(recipe.getIngredients())) {
+            Set<IngredientCommand> ingredients = recipe.getIngredients().stream().map(ingredient -> ingredientMapper.convertDomainToCommand(ingredient)).collect(Collectors.toSet());
+            recipeCommand.setIngredients(ingredients);
+        }
+
+        if (CollectionUtils.isNotEmpty(recipe.getCategories())) {
+            Set<CategoryCommand> categoryCommands = recipe.getCategories().stream().map(category -> categoryMapper.convertDomainToCommand(category)).collect(Collectors.toSet());
+            recipeCommand.setCategories(categoryCommands);
+        }
+        log.info("RecipeCommand ::" + recipeCommand.toString());
+        return recipeCommand;
     }
 }
