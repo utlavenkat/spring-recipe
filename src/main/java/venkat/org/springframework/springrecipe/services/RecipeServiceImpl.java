@@ -33,8 +33,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Transactional
     public RecipeCommand findRecipeById(final Long id) {
-        Recipe recipe = recipeRepository.findById(id).orElse(null);
         RecipeCommand recipeCommand = null;
+        Recipe recipe = recipeRepository.findById(id).orElse(null);
         if (recipe != null) {
             recipeCommand = recipeMapper.convertDomainToCommand(recipe);
         }

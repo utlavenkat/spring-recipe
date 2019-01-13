@@ -8,24 +8,24 @@ import venkat.org.springframework.springrecipe.domain.Notes;
 public class NotesMapper {
 
     public Notes convertCommandToDomain(final NotesCommand notesCommand) {
-        log.info("Converting Notes Command to Domain");
+        log.debug("Converting Notes Command to Domain");
         Notes notes = null;
         if (notesCommand != null) {
             notes = new Notes();
             notes.setId(notesCommand.getId());
             notes.setNotes(notesCommand.getNotes());
         }
-        log.info("Notes Domain ::" + notes);
+        log.debug("Notes Domain ::" + notes);
         return notes;
     }
 
     public NotesCommand convertDomainToCommand(final Notes notes) {
-        log.info("Converting Notes Domain to Command");
+        log.debug("Converting Notes Domain to Command");
         NotesCommand notesCommand = null;
         if (notes != null) {
             notesCommand = NotesCommand.builder().notes(notes.getNotes()).id(notes.getId()).build();
         }
-        log.info("Notes Command ::" + notesCommand);
+        log.debug("Notes Command ::" + notesCommand);
         return notesCommand;
     }
 }

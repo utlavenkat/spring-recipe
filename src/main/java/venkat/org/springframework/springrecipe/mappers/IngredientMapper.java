@@ -9,12 +9,12 @@ public class IngredientMapper {
 
     private UnitOfMeasureMapper unitOfMeasureMapper;
 
-    public IngredientMapper() {
+    IngredientMapper() {
         unitOfMeasureMapper = new UnitOfMeasureMapper();
     }
 
     public Ingredient convertCommandToDomain(final IngredientCommand ingredientCommand) {
-        log.info("Converting Ingredient Command to Domain");
+        log.debug("Converting Ingredient Command to Domain");
         Ingredient ingredient = null;
         if (ingredientCommand != null) {
             ingredient = new Ingredient();
@@ -23,12 +23,12 @@ public class IngredientMapper {
             ingredient.setAmount(ingredientCommand.getAmount());
             ingredient.setUnitOfMeasure(unitOfMeasureMapper.convertCommandToDomain(ingredientCommand.getUnitOfMeasure()));
         }
-        log.info("Ingredient Domain ::" + ingredient);
+        log.debug("Ingredient Domain ::" + ingredient);
         return ingredient;
     }
 
     public IngredientCommand convertDomainToCommand(final Ingredient ingredient) {
-        log.info("Converting Ingredient Domain to Command");
+        log.debug("Converting Ingredient Domain to Command");
         IngredientCommand ingredientCommand = null;
         if (ingredient != null) {
             ingredientCommand = IngredientCommand.builder().amount(ingredient.getAmount())
@@ -36,7 +36,7 @@ public class IngredientMapper {
                     .unitOfMeasure(unitOfMeasureMapper.convertDomainToCommand(ingredient.getUnitOfMeasure()))
                     .build();
         }
-        log.info("Ingredient Command ::" + ingredientCommand);
+        log.debug("Ingredient Command ::" + ingredientCommand);
         return ingredientCommand;
     }
 }

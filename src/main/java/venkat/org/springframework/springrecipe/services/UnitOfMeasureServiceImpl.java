@@ -15,8 +15,8 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
-    private final UnitOfMeasureMapper unitOfMeasureMapper = new UnitOfMeasureMapper();
     private UnitOfMeasureRepository unitOfMeasureRepository;
+    private final UnitOfMeasureMapper unitOfMeasureMapper = new UnitOfMeasureMapper();
 
     @Transactional
     public UnitOfMeasureCommand getUnitOfMeasureByUom(String uom) {

@@ -8,24 +8,24 @@ import venkat.org.springframework.springrecipe.domain.Category;
 public class CategoryMapper {
 
     public Category convertCommandToDomain(CategoryCommand categoryCommand) {
-        log.info("Converting Category Command to Domain");
+        log.debug("Converting Category Command to Domain");
         Category category = null;
         if (categoryCommand != null) {
             category = new Category();
             category.setCategoryName(categoryCommand.getCategoryName());
             category.setId(categoryCommand.getId());
         }
-        log.info("Category Domain ::" + category);
+        log.debug("Category Domain ::" + category);
         return category;
     }
 
     public CategoryCommand convertDomainToCommand(Category category) {
-        log.info("Converting Category Domain to Command");
+        log.debug("Converting Category Domain to Command");
         CategoryCommand categoryCommand = null;
         if (category != null) {
             categoryCommand = CategoryCommand.builder().id(category.getId()).categoryName(category.getCategoryName()).build();
         }
-        log.info("Category Command ::" + categoryCommand);
+        log.debug("Category Command ::" + categoryCommand);
         return categoryCommand;
     }
 }

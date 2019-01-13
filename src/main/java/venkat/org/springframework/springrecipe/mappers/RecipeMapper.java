@@ -29,7 +29,7 @@ public class RecipeMapper {
     }
 
     public Recipe convertCommandToDomain(final RecipeCommand recipeCommand) {
-        log.info("Converting Recipe Command to Domain");
+        log.debug("Converting Recipe Command to Domain");
         Recipe recipe = Recipe.builder().id(recipeCommand.getId()).description(recipeCommand.getDescription())
                 .cookTime(recipeCommand.getCookTime()).servings(recipeCommand.getServings())
                 .directions(recipeCommand.getDirections()).source(recipeCommand.getSource()).url(recipeCommand.getUrl())
@@ -50,13 +50,13 @@ public class RecipeMapper {
             Set<Ingredient> ingredients = recipeCommandIngredients.stream().map(ingredientCommand -> ingredientMapper.convertCommandToDomain(ingredientCommand)).collect(Collectors.toCollection(() -> new HashSet<>(recipeCommandIngredients.size())));
             recipe.addIngredients(ingredients);
         }
-        log.info("Recipe Domain ::" + recipe.toString());
+        log.debug("Recipe Domain ::" + recipe.toString());
         return recipe;
     }
 
     public RecipeCommand convertDomainToCommand(final Recipe recipe) {
 
-        log.info("Converting recipe domain to command");
+        log.debug("Converting recipe domain to command");
         val recipeCommand = RecipeCommand.builder().id(recipe.getId()).directions(recipe.getDirections())
                 .cookTime(recipe.getCookTime()).description(recipe.getDescription()).prepTime(recipe.getPrepTime())
                 .servings(recipe.getServings()).source(recipe.getSource()).url(recipe.getUrl()).build();
@@ -76,7 +76,7 @@ public class RecipeMapper {
             Set<CategoryCommand> categoryCommands = recipe.getCategories().stream().map(category -> categoryMapper.convertDomainToCommand(category)).collect(Collectors.toSet());
             recipeCommand.setCategories(categoryCommands);
         }
-        log.info("RecipeCommand ::" + recipeCommand.toString());
+        log.debug("RecipeCommand ::" + recipeCommand.toString());
         return recipeCommand;
     }
 }

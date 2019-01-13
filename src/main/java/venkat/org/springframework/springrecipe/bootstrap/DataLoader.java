@@ -1,6 +1,6 @@
 package venkat.org.springframework.springrecipe.bootstrap;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import venkat.org.springframework.springrecipe.command.*;
@@ -12,13 +12,13 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
-    private UnitOfMeasureService unitOfMeasureService;
-    private RecipeService recipeService;
-    private CategoryService categoryService;
+    private final UnitOfMeasureService unitOfMeasureService;
+    private final RecipeService recipeService;
+    private final CategoryService categoryService;
 
-    Map<String, UnitOfMeasureCommand> unitOfMeasureCommandMap;
+    private Map<String, UnitOfMeasureCommand> unitOfMeasureCommandMap;
 
     @Override
     public void run(String... args) {
@@ -55,7 +55,8 @@ public class DataLoader implements CommandLineRunner {
         recipeService.saveRecipe(grilledChicken);
     }
 
-    private void prepareGuacamoliIngredients(RecipeCommand guacamoli) {
+    private void prepareGuacamoliIngredients(final RecipeCommand guacamoli) {
+
         guacamoli.addIngredient(IngredientCommand.builder().description("Ripe Avocados").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Ripe")).build());
         guacamoli.addIngredient(IngredientCommand.builder().description("Kosher Salt").amount(BigDecimal.valueOf(0.5)).unitOfMeasure(unitOfMeasureCommandMap.get("Teaspoon")).build());
         guacamoli.addIngredient(IngredientCommand.builder().description("Lime Juice").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Tablespoon")).build());
@@ -68,7 +69,8 @@ public class DataLoader implements CommandLineRunner {
         guacamoli.addIngredient(IngredientCommand.builder().description("Tomato").amount(BigDecimal.valueOf(0.5)).unitOfMeasure(unitOfMeasureCommandMap.get("Quantity")).build());
     }
 
-    private void prepareGrillChickenIngredients(RecipeCommand grillChicken) {
+    private void prepareGrillChickenIngredients(final RecipeCommand grillChicken) {
+
         grillChicken.addIngredient(IngredientCommand.builder().description("Ancho Chilli Powder").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Tablespoon")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Dried Oregano").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Teaspoon")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Dried Cumin").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Teaspoon")).build());
