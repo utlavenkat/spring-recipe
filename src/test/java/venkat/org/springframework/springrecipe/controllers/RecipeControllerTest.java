@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import venkat.org.springframework.springrecipe.domain.Recipe;
+import venkat.org.springframework.springrecipe.command.RecipeCommand;
 import venkat.org.springframework.springrecipe.services.RecipeService;
 
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -36,7 +36,7 @@ public class RecipeControllerTest {
 
     @Test
     public void findRecipeById() throws Exception {
-        Recipe recipe = Recipe.builder().id(1L).description("Test Recipe").build();
+        RecipeCommand recipe = RecipeCommand.builder().id(1L).description("Test Recipe").build();
         when(recipeService.findRecipeById(anyLong())).thenReturn(recipe);
         ResultActions resultActions = mockMvc.perform(get("/recipe/{id}", 1));
         resultActions.andExpect(status().isOk());

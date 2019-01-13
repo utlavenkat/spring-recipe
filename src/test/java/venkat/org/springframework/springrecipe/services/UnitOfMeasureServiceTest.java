@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import venkat.org.springframework.springrecipe.command.UnitOfMeasureCommand;
 import venkat.org.springframework.springrecipe.domain.UnitOfMeasure;
 import venkat.org.springframework.springrecipe.repositories.UnitOfMeasureRepository;
 
@@ -27,7 +28,7 @@ public class UnitOfMeasureServiceTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        unitOfMeasureService = new UnitOfMeasureService(unitOfMeasureRepository);
+        unitOfMeasureService = new UnitOfMeasureServiceImpl(unitOfMeasureRepository);
     }
     @After
     public void tearDown() {
@@ -41,7 +42,7 @@ public class UnitOfMeasureServiceTest {
         val savedUnitOfMeasure = UnitOfMeasure.builder().uom(uom).build();
         savedUnitOfMeasure.setId(1234L);
         when(unitOfMeasureRepository.findByUom(uom)).thenReturn(Optional.of(savedUnitOfMeasure));
-        UnitOfMeasure unitOfMeasure = unitOfMeasureService.getUnitOfMeasureByUom(uom);
+        UnitOfMeasureCommand unitOfMeasure = unitOfMeasureService.getUnitOfMeasureByUom(uom);
         Assert.assertNotNull(unitOfMeasure);
         Assert.assertNotNull(unitOfMeasure.getId());
         Assert.assertEquals(uom,unitOfMeasure.getUom());
@@ -66,7 +67,7 @@ public class UnitOfMeasureServiceTest {
         unitOfMeasures.add(uom2);
 
         when(unitOfMeasureRepository.findAll()).thenReturn(unitOfMeasures);
-        Map<String,UnitOfMeasure> unitOfMeasureMap = unitOfMeasureService.getUnitOfMeasureMap();
+        Map<String, UnitOfMeasureCommand> unitOfMeasureMap = unitOfMeasureService.getUnitOfMeasureMap();
         Assert.assertNotNull(unitOfMeasureMap);
         Assert.assertEquals(2, unitOfMeasureMap.size());
     }

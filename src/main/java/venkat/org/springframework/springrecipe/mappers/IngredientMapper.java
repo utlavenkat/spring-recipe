@@ -1,29 +1,42 @@
 package venkat.org.springframework.springrecipe.mappers;
 
-import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 import venkat.org.springframework.springrecipe.command.IngredientCommand;
 import venkat.org.springframework.springrecipe.domain.Ingredient;
 
-@Component
+@Slf4j
 public class IngredientMapper {
 
-
-    private MapperFacade mapperFacade;
+    private UnitOfMeasureMapper unitOfMeasureMapper;
 
     public IngredientMapper() {
-        MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-        mapperFactory.classMap(Ingredient.class, IngredientCommand.class).byDefault().register();
-        mapperFacade = mapperFactory.getMapperFacade();
+        unitOfMeasureMapper = new UnitOfMeasureMapper();
     }
 
     public Ingredient convertCommandToDomain(final IngredientCommand ingredientCommand) {
-        return mapperFacade.map(ingredientCommand, Ingredient.class);
+        log.info("Converting Ingredient Command to Domain");
+        Ingredient ingredient = null;
+        if (ingredientCommand != null) {
+            ingredient = new Ingredient();
+            ingredient.setId(ingredientCommand.getId());
+            ingredient.setDescription(ingredientCommand.getDescription());
+            ingredient.setAmount(ingredientCommand.getAmount());
+            ingredient.setUnitOfMeasure(unitOfMeasureMapper.convertCommandToDomain(ingredientCommand.getUnitOfMeasure()));
+        }
+        log.info("Ingredient Domain ::" + ingredient);
+        return ingredient;
     }
 
     public IngredientCommand convertDomainToCommand(final Ingredient ingredient) {
-        return mapperFacade.map(ingredient, IngredientCommand.class);
+        log.info("Converting Ingredient Domain to Command");
+        IngredientCommand ingredientCommand = null;
+        if (ingredient != null) {
+            ingredientCommand = IngredientCommand.builder().amount(ingredient.getAmount())
+                    .description(ingredient.getDescription()).id(ingredient.getId())
+                    .unitOfMeasure(unitOfMeasureMapper.convertDomainToCommand(ingredient.getUnitOfMeasure()))
+                    .build();
+        }
+        log.info("Ingredient Command ::" + ingredientCommand);
+        return ingredientCommand;
     }
 }

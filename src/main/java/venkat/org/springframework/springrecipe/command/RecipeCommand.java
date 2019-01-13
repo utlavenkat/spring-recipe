@@ -27,10 +27,16 @@ public class RecipeCommand {
     private Set<CategoryCommand> categories = new HashSet<>();
 
     public boolean addCategory(final CategoryCommand categoryCommand) {
+        if (categories == null) {
+            categories = new HashSet<>();
+        }
         return categories.add(categoryCommand);
     }
 
     public boolean addIngredient(final IngredientCommand ingredientCommand) {
+        if (ingredients == null) {
+            ingredients = new HashSet<>();
+        }
         return ingredients.add(ingredientCommand);
     }
 }

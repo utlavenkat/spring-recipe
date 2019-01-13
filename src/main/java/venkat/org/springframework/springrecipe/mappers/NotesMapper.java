@@ -1,27 +1,31 @@
 package venkat.org.springframework.springrecipe.mappers;
 
-import lombok.val;
-import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 import venkat.org.springframework.springrecipe.command.NotesCommand;
 import venkat.org.springframework.springrecipe.domain.Notes;
 
-@Component
+@Slf4j
 public class NotesMapper {
-    private final MapperFacade mapperFacade;
-
-    public NotesMapper() {
-        val mapperFactory = new DefaultMapperFactory.Builder().build();
-        mapperFactory.classMap(NotesCommand.class, Notes.class).byDefault().register();
-        mapperFacade = mapperFactory.getMapperFacade();
-    }
 
     public Notes convertCommandToDomain(final NotesCommand notesCommand) {
-        return mapperFacade.map(notesCommand, Notes.class);
+        log.info("Converting Notes Command to Domain");
+        Notes notes = null;
+        if (notesCommand != null) {
+            notes = new Notes();
+            notes.setId(notesCommand.getId());
+            notes.setNotes(notesCommand.getNotes());
+        }
+        log.info("Notes Domain ::" + notes);
+        return notes;
     }
 
     public NotesCommand convertDomainToCommand(final Notes notes) {
-        return mapperFacade.map(notes, NotesCommand.class);
+        log.info("Converting Notes Domain to Command");
+        NotesCommand notesCommand = null;
+        if (notes != null) {
+            notesCommand = NotesCommand.builder().notes(notes.getNotes()).id(notes.getId()).build();
+        }
+        log.info("Notes Command ::" + notesCommand);
+        return notesCommand;
     }
 }

@@ -1,9 +1,8 @@
 package venkat.org.springframework.springrecipe.domain;
 
 
-
 import lombok.*;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnJava;
+import org.apache.commons.collections4.CollectionUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +15,7 @@ import java.util.Set;
 @Builder
 @Setter
 @Getter
+@ToString
 public class Recipe implements Serializable {
 
     @Id
@@ -59,14 +59,15 @@ public class Recipe implements Serializable {
         this.notes = notes;
     }
 
-    public Ingredient addIngredient(Ingredient ingredient) {
-        ingredient.setRecipe(this);
-        ingredients.add(ingredient);
-        return ingredient;
-    }
-
-    public Category addCategory(Category category) {
-        categories.add(category);
-        return category;
+    public void addIngredients(Set<Ingredient> ingredients) {
+        if (this.ingredients == null) {
+            this.ingredients = new HashSet<>();
+        }
+        if (CollectionUtils.isNotEmpty(ingredients)) {
+            ingredients.forEach(ingredient -> {
+                ingredient.setRecipe(this);
+                this.ingredients.add(ingredient);
+            });
+        }
     }
 }
