@@ -112,7 +112,7 @@ public class RecipeServiceImplTest {
     }
 
     @Test
-    public void findRecipeById_valid() {
+    public void findRecipeById() {
         Long id = anyLong();
         when(recipeRepository.findById(id)).thenReturn(Optional.of(Recipe.builder().id(id).build()));
         val recipe = recipeService.findRecipeById(1L);
@@ -129,5 +129,28 @@ public class RecipeServiceImplTest {
         RecipeCommand recipe = recipeService.findRecipeById(id);
         assertNull("Recipe should be null", recipe);
         verify(recipeRepository, times(1)).findById(id);
+    }
+
+    @Test
+    public void deleteRecipe() {
+        //given
+        Long id = 1000L;
+        //when
+        recipeService.deleteRecipe(id);
+        //then
+        verify(recipeRepository, times(1)).deleteById(id);
+
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deleteRecipe_invalidId() {
+        //given
+        Long id = 1000L;
+        doThrow(RuntimeException.class).when(recipeRepository).deleteById(id);
+        //when
+        recipeService.deleteRecipe(id);
+
+        //then
+        //see the @Test annotation
     }
 }

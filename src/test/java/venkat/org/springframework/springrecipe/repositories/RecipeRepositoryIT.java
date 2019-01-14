@@ -31,4 +31,14 @@ public class RecipeRepositoryIT {
         assertFalse(recipe.isPresent());
     }
 
+    @Test(expected = Exception.class)
+    public void deleteById_invalid() {
+        recipeRepository.deleteById(12345L);
+    }
+
+    @Test
+    public void deleteById() {
+        recipeRepository.deleteById(10000L);
+    }
+
 }

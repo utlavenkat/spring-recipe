@@ -20,6 +20,7 @@ public class RecipeController {
 
     private static final String VIEW_NAME_RECIPE_FORM = "recipe/recipeform";
     private static final String VIEW_NAME_RECIPE_SHOW = "recipe/show";
+    private static final String VIEW_NAME_INDEX = "index";
 
     private final RecipeService recipeService;
 
@@ -49,5 +50,12 @@ public class RecipeController {
         val savedRecipe = recipeService.saveRecipe(recipeCommand);
         log.info("Saved Recipe ::" + savedRecipe);
         return "redirect:/recipe/" + savedRecipe.getId() + "/view";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/{id}/delete")
+    public String deleteRecipe(@PathVariable final String id) {
+        log.info("Delete Recipe, Input Recipe ID::" + id);
+        recipeService.deleteRecipe(Long.valueOf(id));
+        return "redirect:/" + VIEW_NAME_INDEX;
     }
 }

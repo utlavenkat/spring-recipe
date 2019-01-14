@@ -27,6 +27,7 @@ public class RecipeControllerTest {
 
     private static final String VIEW_NAME_RECIPE_FORM = "recipe/recipeform";
     private static final String VIEW_NAME_RECIPE_SHOW = "recipe/show";
+    private static final String VIEW_NAME_INDEX = "index";
 
     private MockMvc mockMvc;
     private RecipeController recipeController;
@@ -111,5 +112,17 @@ public class RecipeControllerTest {
         resultActions.andExpect(status().is3xxRedirection());
         resultActions.andExpect(view().name("redirect:/recipe/" + inputRecipeCommand.getId().toString() + "/view"));
         verify(recipeService, times(1)).saveRecipe(any(RecipeCommand.class));
+    }
+
+    @Test
+    public void deleteRecipe() throws Exception {
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/recipe/{id}/delete", 1));
+
+        //then
+        resultActions.andExpect(status().is3xxRedirection());
+        resultActions.andExpect(view().name("redirect:/" + VIEW_NAME_INDEX));
+        verify(recipeService, times(1)).deleteRecipe(1L);
     }
 }
