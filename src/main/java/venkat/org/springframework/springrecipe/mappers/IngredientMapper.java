@@ -9,7 +9,7 @@ public class IngredientMapper {
 
     private UnitOfMeasureMapper unitOfMeasureMapper;
 
-    IngredientMapper() {
+    public IngredientMapper() {
         unitOfMeasureMapper = new UnitOfMeasureMapper();
     }
 

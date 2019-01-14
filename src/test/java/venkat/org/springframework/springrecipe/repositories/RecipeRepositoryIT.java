@@ -18,7 +18,7 @@ public class RecipeRepositoryIT {
 
     @Test
     public void testFindById() {
-        val id = 10000L;
+        val id = 1L;
         val recipe = recipeRepository.findById(id);
         assertNotNull(recipe);
         assertTrue(recipe.isPresent());
@@ -38,7 +38,7 @@ public class RecipeRepositoryIT {
 
     @Test
     public void deleteById() {
-        recipeRepository.deleteById(10000L);
+        recipeRepository.deleteById(1L);
     }
 
 }
