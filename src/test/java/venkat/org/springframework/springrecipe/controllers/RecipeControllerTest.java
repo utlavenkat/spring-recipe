@@ -25,7 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 public class RecipeControllerTest {
 
-    private static final String VIEW_NAME_SAVE_RECIPE = "recipe/recipeform";
+    private static final String VIEW_NAME_RECIPE_FORM = "recipe/recipeform";
+    private static final String VIEW_NAME_RECIPE_SHOW = "recipe/show";
+
     private MockMvc mockMvc;
     private RecipeController recipeController;
 
@@ -40,12 +42,17 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void findRecipeById() throws Exception {
+    public void viewRecipe() throws Exception {
+        //Given
         RecipeCommand recipe = RecipeCommand.builder().id(1L).description("Test Recipe").build();
         when(recipeService.findRecipeById(anyLong())).thenReturn(recipe);
-        ResultActions resultActions = mockMvc.perform(get("/recipe/{id}", 1));
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/recipe/{id}/view", 1));
+
+        //then
         resultActions.andExpect(status().isOk());
-        resultActions.andExpect(view().name("recipe/show"));
+        resultActions.andExpect(view().name(VIEW_NAME_RECIPE_SHOW));
         resultActions.andExpect(model().size(1));
         resultActions.andExpect(model().attributeExists("recipe"));
         resultActions.andExpect(model().attribute("recipe", recipe));
@@ -53,19 +60,41 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testNewRecipe() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/recipe/new"));
+    public void editRecipeForm() throws Exception {
+        //Given
+        RecipeCommand recipe = RecipeCommand.builder().id(1L).description("Test Recipe").build();
+        when(recipeService.findRecipeById(anyLong())).thenReturn(recipe);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/recipe/{id}/edit", 1));
+
+        //then
         resultActions.andExpect(status().isOk());
-        resultActions.andExpect(view().name(VIEW_NAME_SAVE_RECIPE));
+        resultActions.andExpect(view().name(VIEW_NAME_RECIPE_FORM));
+        resultActions.andExpect(model().size(1));
+        resultActions.andExpect(model().attributeExists("recipe"));
+        resultActions.andExpect(model().attribute("recipe", recipe));
+        verify(recipeService, times(1)).findRecipeById(1L);
+    }
+
+    @Test
+    public void getNewRecipeForm() throws Exception {
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/recipe/new"));
+
+        //then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(view().name(VIEW_NAME_RECIPE_FORM));
         resultActions.andExpect(model().size(1));
         resultActions.andExpect(model().attributeExists("recipe"));
         resultActions.andExpect(model().attribute("recipe", Matchers.notNullValue()));
-        resultActions.andExpect(model().attribute("recipe.id", Matchers.nullValue()));
         verify(recipeService, times(0)).findRecipeById(anyLong());
     }
 
     @Test
-    public void testCreateRecipe() throws Exception {
+    public void postRecipeForm() throws Exception {
+
         //Given
         RecipeCommand inputRecipeCommand = RecipeCommand.builder().difficulty(DifficultyCommand.HARD).prepTime(20)
                 .url("https://testRecipes.com").source("My source").directions("1.2.3.4").servings(4).cookTime(20)
@@ -80,7 +109,7 @@ public class RecipeControllerTest {
 
         //then
         resultActions.andExpect(status().is3xxRedirection());
-        resultActions.andExpect(view().name("redirect:/recipe/" + inputRecipeCommand.getId().toString()));
+        resultActions.andExpect(view().name("redirect:/recipe/" + inputRecipeCommand.getId().toString() + "/view"));
         verify(recipeService, times(1)).saveRecipe(any(RecipeCommand.class));
     }
 }
