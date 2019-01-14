@@ -61,12 +61,12 @@ public class DataLoader implements CommandLineRunner {
         guacamoli.addIngredient(IngredientCommand.builder().description("Kosher Salt").amount(BigDecimal.valueOf(0.5)).unitOfMeasure(unitOfMeasureCommandMap.get("Teaspoon")).build());
         guacamoli.addIngredient(IngredientCommand.builder().description("Lime Juice").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Tablespoon")).build());
         guacamoli.addIngredient(IngredientCommand.builder().description("Minced Red Onion").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Tablespoon")).build());
-        guacamoli.addIngredient(IngredientCommand.builder().description("Serrano Chiles").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Quantity")).build());
-        guacamoli.addIngredient(IngredientCommand.builder().description("Serrano Stems").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Quantity")).build());
-        guacamoli.addIngredient(IngredientCommand.builder().description("Serrano Seeds").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Quantity")).build());
-        guacamoli.addIngredient(IngredientCommand.builder().description("Cilantro").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Quantity")).build());
-        guacamoli.addIngredient(IngredientCommand.builder().description("Black Pepper").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Quantity")).build());
-        guacamoli.addIngredient(IngredientCommand.builder().description("Tomato").amount(BigDecimal.valueOf(0.5)).unitOfMeasure(unitOfMeasureCommandMap.get("Quantity")).build());
+        guacamoli.addIngredient(IngredientCommand.builder().description("Serrano Chiles").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Each")).build());
+        guacamoli.addIngredient(IngredientCommand.builder().description("Serrano Stems").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Each")).build());
+        guacamoli.addIngredient(IngredientCommand.builder().description("Serrano Seeds").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Each")).build());
+        guacamoli.addIngredient(IngredientCommand.builder().description("Cilantro").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Each")).build());
+        guacamoli.addIngredient(IngredientCommand.builder().description("Black Pepper").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Each")).build());
+        guacamoli.addIngredient(IngredientCommand.builder().description("Tomato").amount(BigDecimal.valueOf(0.5)).unitOfMeasure(unitOfMeasureCommandMap.get("Each")).build());
     }
 
     private void prepareGrillChickenIngredients(final RecipeCommand grillChicken) {
@@ -76,17 +76,17 @@ public class DataLoader implements CommandLineRunner {
         grillChicken.addIngredient(IngredientCommand.builder().description("Dried Cumin").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Teaspoon")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Sugar").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Teaspoon")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Salt").amount(BigDecimal.valueOf(0.5)).unitOfMeasure(unitOfMeasureCommandMap.get("Teaspoon")).build());
-        grillChicken.addIngredient(IngredientCommand.builder().description("Clove Garlic").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Quantity")).build());
+        grillChicken.addIngredient(IngredientCommand.builder().description("Clove Garlic").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Each")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Orange Zest").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Tablespoon")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Orange Juice").amount(BigDecimal.valueOf(3)).unitOfMeasure(unitOfMeasureCommandMap.get("Tablespoon")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Olive Oil").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Tablespoon")).build());
-        grillChicken.addIngredient(IngredientCommand.builder().description("Chicken Thighs").amount(BigDecimal.valueOf(6)).unitOfMeasure(unitOfMeasureCommandMap.get("Quantity")).build());
+        grillChicken.addIngredient(IngredientCommand.builder().description("Chicken Thighs").amount(BigDecimal.valueOf(6)).unitOfMeasure(unitOfMeasureCommandMap.get("Each")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Corn Tortillas").amount(BigDecimal.valueOf(3)).unitOfMeasure(unitOfMeasureCommandMap.get("Cup")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Avocados").amount(BigDecimal.valueOf(2)).unitOfMeasure(unitOfMeasureCommandMap.get("Ripe")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Cherry Tomato").amount(BigDecimal.valueOf(0.5)).unitOfMeasure(unitOfMeasureCommandMap.get("Pint")).build());
-        grillChicken.addIngredient(IngredientCommand.builder().description("Red Onion").amount(BigDecimal.valueOf(0.25)).unitOfMeasure(unitOfMeasureCommandMap.get("Quantity")).build());
+        grillChicken.addIngredient(IngredientCommand.builder().description("Red Onion").amount(BigDecimal.valueOf(0.25)).unitOfMeasure(unitOfMeasureCommandMap.get("Each")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Sour Cream").amount(BigDecimal.valueOf(0.5)).unitOfMeasure(unitOfMeasureCommandMap.get("Cup")).build());
         grillChicken.addIngredient(IngredientCommand.builder().description("Milk").amount(BigDecimal.valueOf(0.25)).unitOfMeasure(unitOfMeasureCommandMap.get("Cup")).build());
-        grillChicken.addIngredient(IngredientCommand.builder().description("Lime").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Quantity")).build());
+        grillChicken.addIngredient(IngredientCommand.builder().description("Lime").amount(BigDecimal.valueOf(1)).unitOfMeasure(unitOfMeasureCommandMap.get("Each")).build());
     }
 }
