@@ -16,10 +16,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class UnitOfMeasureServiceTest {
+public class UnitOfMeasureServiceImplTest {
 
     private UnitOfMeasureService unitOfMeasureService;
     @Mock
@@ -57,7 +58,7 @@ public class UnitOfMeasureServiceTest {
     }
 
     @Test
-    public void getUnitOfServiceMap() {
+    public void getUnitOfMeasureMap() {
         val uom1 = UnitOfMeasure.builder().uom("Cup").build();
         uom1.setId(1L);
         val uom2 = UnitOfMeasure.builder().uom("Pint").build();
@@ -70,5 +71,18 @@ public class UnitOfMeasureServiceTest {
         Map<String, UnitOfMeasureCommand> unitOfMeasureMap = unitOfMeasureService.getUnitOfMeasureMap();
         Assert.assertNotNull(unitOfMeasureMap);
         Assert.assertEquals(2, unitOfMeasureMap.size());
+    }
+
+    @Test
+    public void getAllUnitOfMeasures() {
+        final Set<UnitOfMeasure> unitOfMeasures = new HashSet<>(2);
+        unitOfMeasures.add(UnitOfMeasure.builder().id(1L).uom("TableSpoon").build());
+        unitOfMeasures.add(UnitOfMeasure.builder().id(2L).uom("Cup").build());
+
+        when(unitOfMeasureRepository.findAll()).thenReturn(unitOfMeasures);
+
+        final Set<UnitOfMeasureCommand> unitOfMeasureCommands = unitOfMeasureService.getAllUnitOfMeasures();
+        assertEquals(unitOfMeasures.size(), unitOfMeasureCommands.size());
+
     }
 }

@@ -1,5 +1,6 @@
 package venkat.org.springframework.springrecipe.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -9,17 +10,26 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import venkat.org.springframework.springrecipe.command.IngredientCommand;
 import venkat.org.springframework.springrecipe.command.RecipeCommand;
+import venkat.org.springframework.springrecipe.command.UnitOfMeasureCommand;
 import venkat.org.springframework.springrecipe.services.IngredientService;
 import venkat.org.springframework.springrecipe.services.RecipeService;
+import venkat.org.springframework.springrecipe.services.UnitOfMeasureService;
+
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class IngredientControllerTest {
 
     private static final String VIEW_NAME_INGREDIENT_LIST = "/recipe/ingredients/list";
     private static final String VIEW_NAME_INGREDIENT_SHOW = "/recipe/ingredients/show";
+    private static final String VIEW_NAME_INGREDIENT_FORM = "/recipe/ingredients/ingredientform";
+
 
 
     @Mock
@@ -28,14 +38,16 @@ public class IngredientControllerTest {
     @Mock
     private IngredientService ingredientService;
 
-    private IngredientController controller;
+    @Mock
+    private UnitOfMeasureService unitOfMeasureService;
+
 
     private MockMvc mockMvc;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new IngredientController(recipeService, ingredientService);
+        IngredientController controller = new IngredientController(recipeService, ingredientService, unitOfMeasureService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -72,5 +84,51 @@ public class IngredientControllerTest {
                 .andExpect(model().size(1))
                 .andExpect(view().name(VIEW_NAME_INGREDIENT_SHOW));
         verify(ingredientService, times(1)).findIngredientById(anyLong());
+    }
+
+    @Test
+    public void editIngredientById() throws Exception {
+        //Given
+        Long id = 1L;
+        when(ingredientService.findIngredientById(anyLong())).thenReturn(IngredientCommand.builder().id(1L)
+                .description("Tomato").amount(BigDecimal.ONE).build());
+
+        final Set<UnitOfMeasureCommand> unitOfMeasures = new HashSet<>(2);
+        unitOfMeasures.add(UnitOfMeasureCommand.builder().id(1L).uom("TableSpoon").build());
+        unitOfMeasures.add(UnitOfMeasureCommand.builder().id(2L).uom("Cup").build());
+
+        when(unitOfMeasureService.getAllUnitOfMeasures()).thenReturn(unitOfMeasures);
+
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/recipe/ingredient/" + id + "/edit"));
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(view().name(VIEW_NAME_INGREDIENT_FORM))
+                .andExpect(model().size(2))
+                .andExpect(model().attributeExists("ingredient", "uomList"));
+    }
+
+    @Test
+    public void saveIngredient() throws Exception {
+
+        //Given
+        IngredientCommand ingredientCommand = IngredientCommand.builder().amount(BigDecimal.ONE).description("Tomato")
+                .build();
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(ingredientCommand);
+        ingredientCommand.setId(100L);
+        when(ingredientService.save(any(IngredientCommand.class))).thenReturn(ingredientCommand);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(post("/recipe/ingredient").content(jsonInString));
+
+        //then
+        resultActions.andExpect(status().is3xxRedirection());
+        resultActions.andExpect(view().name("redirect:/recipe/ingredient/" + ingredientCommand
+                .getId().toString() + "/view"));
+        verify(ingredientService, times(1)).save(any(IngredientCommand.class));
+
     }
 }

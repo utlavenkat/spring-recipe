@@ -4,4 +4,6 @@ import venkat.org.springframework.springrecipe.command.IngredientCommand;
 
 public interface IngredientService {
     IngredientCommand findIngredientById(Long id);
+
+    IngredientCommand save(IngredientCommand ingredientCommand);
 }

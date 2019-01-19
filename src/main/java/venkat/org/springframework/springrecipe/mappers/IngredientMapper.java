@@ -3,6 +3,7 @@ package venkat.org.springframework.springrecipe.mappers;
 import lombok.extern.slf4j.Slf4j;
 import venkat.org.springframework.springrecipe.command.IngredientCommand;
 import venkat.org.springframework.springrecipe.domain.Ingredient;
+import venkat.org.springframework.springrecipe.domain.Recipe;
 
 @Slf4j
 public class IngredientMapper {
@@ -22,6 +23,8 @@ public class IngredientMapper {
             ingredient.setDescription(ingredientCommand.getDescription());
             ingredient.setAmount(ingredientCommand.getAmount());
             ingredient.setUnitOfMeasure(unitOfMeasureMapper.convertCommandToDomain(ingredientCommand.getUnitOfMeasure()));
+            Recipe recipe = Recipe.builder().id(ingredientCommand.getRecipeId()).build();
+            ingredient.setRecipe(recipe);
         }
         log.debug("Ingredient Domain ::" + ingredient);
         return ingredient;
@@ -35,6 +38,7 @@ public class IngredientMapper {
                     .description(ingredient.getDescription()).id(ingredient.getId())
                     .unitOfMeasure(unitOfMeasureMapper.convertDomainToCommand(ingredient.getUnitOfMeasure()))
                     .build();
+            ingredientCommand.setRecipeId(ingredient.getRecipe().getId());
         }
         log.debug("Ingredient Command ::" + ingredientCommand);
         return ingredientCommand;
