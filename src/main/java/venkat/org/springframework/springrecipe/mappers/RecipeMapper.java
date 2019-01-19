@@ -33,7 +33,7 @@ public class RecipeMapper {
         Recipe recipe = Recipe.builder().id(recipeCommand.getId()).description(recipeCommand.getDescription())
                 .cookTime(recipeCommand.getCookTime()).servings(recipeCommand.getServings())
                 .directions(recipeCommand.getDirections()).source(recipeCommand.getSource()).url(recipeCommand.getUrl())
-                .prepTime(recipeCommand.getPrepTime()).build();
+                .prepTime(recipeCommand.getPrepTime()).image(recipeCommand.getImage()).build();
         recipe.setNotes(notesMapper.convertCommandToDomain(recipeCommand.getNotes()));
         if (recipeCommand.getDifficulty() != null) {
             recipe.setDifficulty(Difficulty.valueOf(recipeCommand.getDifficulty().name()));
@@ -59,7 +59,8 @@ public class RecipeMapper {
         log.debug("Converting recipe domain to command");
         val recipeCommand = RecipeCommand.builder().id(recipe.getId()).directions(recipe.getDirections())
                 .cookTime(recipe.getCookTime()).description(recipe.getDescription()).prepTime(recipe.getPrepTime())
-                .servings(recipe.getServings()).source(recipe.getSource()).url(recipe.getUrl()).build();
+                .servings(recipe.getServings()).source(recipe.getSource()).url(recipe.getUrl())
+                .image(recipe.getImage()).build();
 
         recipeCommand.setNotes(notesMapper.convertDomainToCommand(recipe.getNotes()));
 
