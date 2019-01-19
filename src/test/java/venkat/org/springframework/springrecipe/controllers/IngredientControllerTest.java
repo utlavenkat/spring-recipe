@@ -131,4 +131,28 @@ public class IngredientControllerTest {
         verify(ingredientService, times(1)).save(any(IngredientCommand.class));
 
     }
+
+
+    @Test
+    public void newIngredientForm() throws Exception {
+        //Given
+        Long recipeId = 1L;
+        final Set<UnitOfMeasureCommand> unitOfMeasures = new HashSet<>(2);
+        unitOfMeasures.add(UnitOfMeasureCommand.builder().id(1L).uom("TableSpoon").build());
+        unitOfMeasures.add(UnitOfMeasureCommand.builder().id(2L).uom("Cup").build());
+
+        when(unitOfMeasureService.getAllUnitOfMeasures()).thenReturn(unitOfMeasures);
+
+        //when
+        final ResultActions resultActions = mockMvc.perform(get("/recipe/" + recipeId + "/ingredient/new"));
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(view().name(VIEW_NAME_INGREDIENT_FORM))
+                .andExpect(model().size(2))
+                .andExpect(model().attributeExists("ingredient", "uomList"));
+        verify(unitOfMeasureService, times(1)).getAllUnitOfMeasures();
+        verify(ingredientService, times(0)).findIngredientById(anyLong());
+
+    }
 }

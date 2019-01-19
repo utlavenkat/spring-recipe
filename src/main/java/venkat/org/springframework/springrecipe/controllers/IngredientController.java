@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import venkat.org.springframework.springrecipe.command.IngredientCommand;
+import venkat.org.springframework.springrecipe.command.UnitOfMeasureCommand;
 import venkat.org.springframework.springrecipe.services.IngredientService;
 import venkat.org.springframework.springrecipe.services.RecipeService;
 import venkat.org.springframework.springrecipe.services.UnitOfMeasureService;
@@ -59,5 +60,14 @@ public class IngredientController {
         val savedIngredient = ingredientService.save(ingredientCommand);
         log.info("Saved Ingredient ::" + savedIngredient);
         return "redirect:/recipe/ingredient/" + savedIngredient.getId() + "/view";
+    }
+
+    @RequestMapping(path = "/recipe/{id}/ingredient/new")
+    public String newIngredientForm(@PathVariable final Long id, final Model model) {
+        final IngredientCommand ingredientCommand = IngredientCommand.builder().recipeId(id)
+                .unitOfMeasure(UnitOfMeasureCommand.builder().build()).build();
+        model.addAttribute("ingredient", ingredientCommand);
+        model.addAttribute("uomList", unitOfMeasureService.getAllUnitOfMeasures());
+        return VIEW_NAME_INGREDIENT_FORM;
     }
 }
