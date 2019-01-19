@@ -30,8 +30,6 @@ public class IngredientControllerTest {
     private static final String VIEW_NAME_INGREDIENT_SHOW = "/recipe/ingredients/show";
     private static final String VIEW_NAME_INGREDIENT_FORM = "/recipe/ingredients/ingredientform";
 
-
-
     @Mock
     private RecipeService recipeService;
 
@@ -154,5 +152,26 @@ public class IngredientControllerTest {
         verify(unitOfMeasureService, times(1)).getAllUnitOfMeasures();
         verify(ingredientService, times(0)).findIngredientById(anyLong());
 
+    }
+
+    @Test
+    public void deleteIngredientById() throws Exception {
+        //Given
+        final Long recipeId = 1L;
+        final Long ingredientId = 1L;
+        when(recipeService.findRecipeById(anyLong())).thenReturn(RecipeCommand.builder().id(recipeId).build());
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/recipe/" + recipeId + "/ingredient/"
+                + ingredientId + "/delete"));
+
+        //then
+        resultActions.andExpect(status().isOk())
+                .andExpect(view().name(VIEW_NAME_INGREDIENT_LIST))
+                .andExpect(model().size(1))
+                .andExpect(model().attributeExists("recipe"));
+
+        verify(ingredientService, times(1)).delete(anyLong());
+        verify(recipeService, times(1)).findRecipeById(anyLong());
     }
 }

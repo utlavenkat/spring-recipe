@@ -31,4 +31,9 @@ public class IngredientServiceImpl implements IngredientService {
         final Ingredient savedIngredient = ingredientRepository.save(ingredientMapper.convertCommandToDomain(ingredientCommand));
         return ingredientMapper.convertDomainToCommand(savedIngredient);
     }
+
+    @Override
+    public void delete(Long id) {
+        ingredientRepository.deleteById(id);
+    }
 }

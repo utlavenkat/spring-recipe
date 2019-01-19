@@ -70,4 +70,13 @@ public class IngredientController {
         model.addAttribute("uomList", unitOfMeasureService.getAllUnitOfMeasures());
         return VIEW_NAME_INGREDIENT_FORM;
     }
+
+    @RequestMapping(path = "/recipe/{recipeId}/ingredient/{id}/delete")
+    public String deleteIngredientById(@PathVariable final Long recipeId, @PathVariable final Long id, final Model model) {
+        log.info("deleteIngredientById() Input Ingredient ID::" + id);
+        ingredientService.delete(id);
+        model.addAttribute("recipe", recipeService.findRecipeById(recipeId));
+        return VIEW_NAME_INGREDIENT_LIST;
+    }
+
 }
