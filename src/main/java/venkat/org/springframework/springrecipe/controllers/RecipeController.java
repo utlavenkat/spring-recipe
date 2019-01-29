@@ -22,8 +22,6 @@ public class RecipeController {
     private static final String VIEW_NAME_RECIPE_SHOW = "recipe/show";
     private static final String VIEW_NAME_INDEX = "index";
     private static final String VIEW_NAME_ERROR_PAGE_404 = "errorpages/404";
-    private static final String VIEW_NAME_ERROR_PAGE_400 = "errorpages/400";
-
     private final RecipeService recipeService;
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}/view")
@@ -67,16 +65,6 @@ public class RecipeController {
         log.error("Exception occurred. Root Cause is ::" + ex.getMessage());
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(VIEW_NAME_ERROR_PAGE_404);
-        modelAndView.addObject("exception", ex);
-        return modelAndView;
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NumberFormatException.class)
-    public ModelAndView handleNumberFormatException(Exception ex) {
-        log.error("Exception occurred while processing your request. Root cause::" + ex.getMessage());
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(VIEW_NAME_ERROR_PAGE_400);
         modelAndView.addObject("exception", ex);
         return modelAndView;
     }
