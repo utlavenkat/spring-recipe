@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import venkat.org.springframework.springrecipe.command.DifficultyCommand;
 import venkat.org.springframework.springrecipe.command.RecipeCommand;
+import venkat.org.springframework.springrecipe.exceptions.NotFoundException;
 import venkat.org.springframework.springrecipe.services.RecipeService;
 
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -57,6 +58,20 @@ public class RecipeControllerTest {
         resultActions.andExpect(model().size(1));
         resultActions.andExpect(model().attributeExists("recipe"));
         resultActions.andExpect(model().attribute("recipe", recipe));
+        verify(recipeService, times(1)).findRecipeById(1L);
+    }
+
+    @Test
+    public void viewRecipeNotFound() throws Exception {
+        //Given
+        when(recipeService.findRecipeById(anyLong())).thenThrow(NotFoundException.class);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/recipe/{id}/view", 1));
+
+        //then
+        resultActions.andExpect(status().isNotFound());
+
         verify(recipeService, times(1)).findRecipeById(1L);
     }
 

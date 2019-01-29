@@ -5,11 +5,13 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 import venkat.org.springframework.springrecipe.command.RecipeCommand;
 import venkat.org.springframework.springrecipe.domain.Recipe;
+import venkat.org.springframework.springrecipe.exceptions.NotFoundException;
 import venkat.org.springframework.springrecipe.mappers.RecipeMapper;
 import venkat.org.springframework.springrecipe.repositories.RecipeRepository;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -33,12 +35,11 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Transactional
     public RecipeCommand findRecipeById(final Long id) {
-        RecipeCommand recipeCommand = null;
-        Recipe recipe = recipeRepository.findById(id).orElse(null);
-        if (recipe != null) {
-            recipeCommand = recipeMapper.convertDomainToCommand(recipe);
+        Optional<Recipe> recipe = recipeRepository.findById(id);
+        if (!recipe.isPresent()) {
+            throw new NotFoundException("Recipe not found for the id " + id);
         }
-        return recipeCommand;
+        return recipeMapper.convertDomainToCommand(recipe.get());
     }
 
     @Override

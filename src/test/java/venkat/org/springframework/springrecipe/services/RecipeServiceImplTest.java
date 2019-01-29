@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import venkat.org.springframework.springrecipe.command.*;
 import venkat.org.springframework.springrecipe.domain.Recipe;
+import venkat.org.springframework.springrecipe.exceptions.NotFoundException;
 import venkat.org.springframework.springrecipe.mappers.RecipeMapper;
 import venkat.org.springframework.springrecipe.repositories.RecipeRepository;
 
@@ -17,7 +18,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 
@@ -122,12 +124,12 @@ public class RecipeServiceImplTest {
         verify(recipeRepository, times(1)).findById(anyLong());
     }
 
-    @Test
+    @Test(expected = NotFoundException.class)
     public void findRecipeById_Invalid() {
         Long id = anyLong();
         when(recipeRepository.findById(id)).thenReturn(Optional.empty());
         RecipeCommand recipe = recipeService.findRecipeById(id);
-        assertNull("Recipe should be null", recipe);
+        // assertNull("Recipe should be null", recipe);
         verify(recipeRepository, times(1)).findById(id);
     }
 
