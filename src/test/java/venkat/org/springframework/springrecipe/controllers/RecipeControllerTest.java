@@ -30,6 +30,8 @@ public class RecipeControllerTest {
     private static final String VIEW_NAME_RECIPE_SHOW = "recipe/show";
     private static final String VIEW_NAME_INDEX = "index";
     private static final String VIEW_NAME_ERROR_PAGE_404 = "errorpages/404";
+    private static final String VIEW_NAME_ERROR_PAGE_400 = "errorpages/400";
+
 
 
     private MockMvc mockMvc;
@@ -61,6 +63,23 @@ public class RecipeControllerTest {
         resultActions.andExpect(model().attributeExists("recipe"));
         resultActions.andExpect(model().attribute("recipe", recipe));
         verify(recipeService, times(1)).findRecipeById(1L);
+    }
+
+    @Test
+    public void viewRecipe_NumberFormatException() throws Exception {
+        //Given
+        RecipeCommand recipe = RecipeCommand.builder().id(1L).description("Test Recipe").build();
+        when(recipeService.findRecipeById(anyLong())).thenReturn(recipe);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/recipe/{id}/view", "abc"));
+
+        //then
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(view().name(VIEW_NAME_ERROR_PAGE_400));
+        resultActions.andExpect(model().size(1));
+        resultActions.andExpect(model().attributeExists("exception"));
+        verifyZeroInteractions(recipeService);
     }
 
     @Test
