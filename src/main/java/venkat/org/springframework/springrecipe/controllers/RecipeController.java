@@ -3,13 +3,13 @@ package venkat.org.springframework.springrecipe.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import venkat.org.springframework.springrecipe.command.RecipeCommand;
+import venkat.org.springframework.springrecipe.exceptions.NotFoundException;
 import venkat.org.springframework.springrecipe.services.RecipeService;
 
 @Controller
@@ -21,6 +21,7 @@ public class RecipeController {
     private static final String VIEW_NAME_RECIPE_FORM = "recipe/recipeform";
     private static final String VIEW_NAME_RECIPE_SHOW = "recipe/show";
     private static final String VIEW_NAME_INDEX = "index";
+    private static final String VIEW_NAME_ERROR_PAGE_404 = "errorpages/404";
 
     private final RecipeService recipeService;
 
@@ -57,5 +58,15 @@ public class RecipeController {
         log.info("Delete Recipe, Input Recipe ID::" + id);
         recipeService.deleteRecipe(Long.valueOf(id));
         return "redirect:/" + VIEW_NAME_INDEX;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView handleNotFoundException(Exception ex) {
+        log.error("Exception occurred. Root Cause is ::" + ex.getMessage());
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(VIEW_NAME_ERROR_PAGE_404);
+        modelAndView.addObject("exception", ex);
+        return modelAndView;
     }
 }

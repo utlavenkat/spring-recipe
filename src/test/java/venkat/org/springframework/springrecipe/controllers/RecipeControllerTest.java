@@ -29,6 +29,8 @@ public class RecipeControllerTest {
     private static final String VIEW_NAME_RECIPE_FORM = "recipe/recipeform";
     private static final String VIEW_NAME_RECIPE_SHOW = "recipe/show";
     private static final String VIEW_NAME_INDEX = "index";
+    private static final String VIEW_NAME_ERROR_PAGE_404 = "errorpages/404";
+
 
     private MockMvc mockMvc;
     private RecipeController recipeController;
@@ -70,7 +72,8 @@ public class RecipeControllerTest {
         ResultActions resultActions = mockMvc.perform(get("/recipe/{id}/view", 1));
 
         //then
-        resultActions.andExpect(status().isNotFound());
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(view().name(VIEW_NAME_ERROR_PAGE_404));
 
         verify(recipeService, times(1)).findRecipeById(1L);
     }

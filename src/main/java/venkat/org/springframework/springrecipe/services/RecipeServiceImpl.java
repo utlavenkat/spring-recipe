@@ -37,7 +37,7 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeCommand findRecipeById(final Long id) {
         Optional<Recipe> recipe = recipeRepository.findById(id);
         if (!recipe.isPresent()) {
-            throw new NotFoundException("Recipe not found for the id " + id);
+            throw new NotFoundException("Recipe not found for the ID value: " + id);
         }
         return recipeMapper.convertDomainToCommand(recipe.get());
     }
