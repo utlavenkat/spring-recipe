@@ -34,6 +34,7 @@ public class RecipeControllerTest {
 
 
 
+
     private MockMvc mockMvc;
     private RecipeController recipeController;
 
@@ -136,21 +137,48 @@ public class RecipeControllerTest {
     public void postRecipeForm() throws Exception {
 
         //Given
-        RecipeCommand inputRecipeCommand = RecipeCommand.builder().difficulty(DifficultyCommand.HARD).prepTime(20)
+        RecipeCommand inputRecipeCommand = RecipeCommand.builder().difficulty(DifficultyCommand.HARD).prepTime(0)
                 .url("https://testRecipes.com").source("My source").directions("1.2.3.4").servings(4).cookTime(20)
                 .description("Test Recipe").build();
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(inputRecipeCommand);
+        System.out.println(jsonInString);
         inputRecipeCommand.setId(100L);
         when(recipeService.saveRecipe(any(RecipeCommand.class))).thenReturn(inputRecipeCommand);
 
         //when
-        ResultActions resultActions = mockMvc.perform(post("/recipe").content(jsonInString));
+        ResultActions resultActions = mockMvc.perform(post("/recipe")
+                .param("description", "some recipe")
+                .param("directions", inputRecipeCommand.getDirections())
+        );
 
         //then
         resultActions.andExpect(status().is3xxRedirection());
         resultActions.andExpect(view().name("redirect:/recipe/" + inputRecipeCommand.getId().toString() + "/view"));
         verify(recipeService, times(1)).saveRecipe(any(RecipeCommand.class));
+    }
+
+    @Test
+    public void postRecipeForm_validationFail() throws Exception {
+
+        //Given
+        RecipeCommand inputRecipeCommand = RecipeCommand.builder().difficulty(DifficultyCommand.HARD).prepTime(0)
+                .url("https://testRecipes.com").source("My source").directions("1.2.3.4").servings(4).cookTime(20)
+                .description("Test Recipe").build();
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(inputRecipeCommand);
+        System.out.println(jsonInString);
+        inputRecipeCommand.setId(100L);
+        when(recipeService.saveRecipe(any(RecipeCommand.class))).thenReturn(inputRecipeCommand);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(post("/recipe")
+                .param("description", "some recipe"));
+
+        //then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(view().name(VIEW_NAME_RECIPE_FORM));
+        verifyZeroInteractions(recipeService);
     }
 
     @Test

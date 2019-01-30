@@ -6,11 +6,14 @@ import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import venkat.org.springframework.springrecipe.command.RecipeCommand;
 import venkat.org.springframework.springrecipe.exceptions.NotFoundException;
 import venkat.org.springframework.springrecipe.services.RecipeService;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(path = "/recipe")
@@ -46,7 +49,11 @@ public class RecipeController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String saveRecipe(@ModelAttribute RecipeCommand recipeCommand) {
+    public String saveRecipe(@Valid @ModelAttribute("recipe") RecipeCommand recipeCommand, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(objectError -> log.debug(objectError.toString()));
+            return VIEW_NAME_RECIPE_FORM;
+        }
         val savedRecipe = recipeService.saveRecipe(recipeCommand);
         log.info("Saved Recipe ::" + savedRecipe);
         return "redirect:/recipe/" + savedRecipe.getId() + "/view";
