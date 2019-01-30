@@ -62,7 +62,8 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-3 form-group" th:class="${#fields.hasErrors('prepTime')}
+                                ? 'col-md-3 form-group has-error' : 'col-md-3 form-group'">
                                     <label>Prep Time:</label>
                                     <input class="form-control" th:errorclass="has-error" th:field="*{prepTime}"
                                            type="text"/>
@@ -72,7 +73,8 @@
                                         </ul>
                                     </span>
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-3 form-group" th:class="${#fields.hasErrors('cookTime')}
+                                ? 'col-md-3 form-group has-error' : 'col-md-3 form-group'">
                                     <label>Cook Time:</label>
                                     <input class="form-control" th:errorclass="has-error" th:field="*{cookTime}"
                                            type="text"/>
@@ -93,7 +95,8 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-3 form-group" th:class="${#fields.hasErrors('servings')}
+                                ? 'col-md-3 form-group has-error' : 'col-md-3 form-group'">
                                     <label>Servings:</label>
                                     <input class="form-control" th:errorclass="has-error" th:field="*{servings}"
                                            type="text"/>
@@ -107,7 +110,8 @@
                                     <label>Source:</label>
                                     <input class="form-control" th:field="*{source}" type="text"/>
                                 </div>
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-3 form-group" th:class="${#fields.hasErrors('url')}
+                                ? 'col-md-3 form-group has-error' : 'col-md-3 form-group'">
                                     <label>URL:</label>
                                     <input class="form-control" th:errorclass="has-error" th:field="*{url}"
                                            type="text"/>
