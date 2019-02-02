@@ -2,6 +2,7 @@ package venkat.org.springframework.springrecipe.bootstrap;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import venkat.org.springframework.springrecipe.command.*;
 import venkat.org.springframework.springrecipe.services.CategoryService;
@@ -13,7 +14,8 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class DataLoader implements CommandLineRunner {
+@Profile("default")
+public class DataLoaderDefault implements CommandLineRunner {
     private final UnitOfMeasureService unitOfMeasureService;
     private final RecipeService recipeService;
     private final CategoryService categoryService;
